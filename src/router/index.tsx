@@ -10,22 +10,22 @@ const RouteComponent = lazy(() => import('src/components/common/route-component'
 // 404 页面
 const NotFound = lazy(() => import('src/views/404'));
 // 登陆页面
-const Login = lazy(() => import('src/views/login'));
+const Register = lazy(() => import('src/views/register'));
+// 客户端布局页面
+const Client = lazy(() => import('src/views/client'));
 // 首页
 const Home = lazy(() => import('src/views/home'));
-
-const RouterView = lazy(() => import('src/views/router-view'));
 
 // 路由列表
 const routerList: RouteObject[] = [
   {
     path: '/',
-    element: <Home />,
+    element: <Client />,
+    children: [{ index: true, element: <Home /> }],
   },
   {
-    path: '/',
-    element: <RouterView />,
-    children: [{ path: 'login', element: <Login />, children: [] }],
+    path: '/register',
+    element: <Register />,
   },
   // 匹配不到路径，跳转 404 页面
   { path: '*', element: <RouteComponent element={<NotFound />} title="404" /> },

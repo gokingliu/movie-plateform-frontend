@@ -1,0 +1,30 @@
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+
+  &__tooltip {
+    .ant-popover-arrow {
+      display: none;
+    }
+
+    .ant-popover-inner-content {
+      padding: 0;
+
+      .buttons {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .button {
+        width: 80px;
+      }
+    }
+  }
+
+  &__avatar {
+    font-size: 18px;
+  }
+}

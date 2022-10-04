@@ -5,4 +5,5 @@ const reducer = combineReducers({ user });
 
 const store = configureStore({ reducer });
 
+export type StateType = ReturnType<typeof reducer>;
 export default store;

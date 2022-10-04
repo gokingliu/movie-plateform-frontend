@@ -2,9 +2,7 @@ import React, { Component, ReactNode } from 'react';
 import { Button, Result } from 'antd';
 import { PropsErrorBoundary, StateErrorBoundary } from 'src/types';
 
-/**
- * @description 组件实现
- */
+/** Class Component */
 class ErrorBoundary extends Component<PropsErrorBoundary, StateErrorBoundary> {
   state: StateErrorBoundary = {
     hasError: false,
@@ -13,9 +11,9 @@ class ErrorBoundary extends Component<PropsErrorBoundary, StateErrorBoundary> {
   errorResult = (
     <Result
       status="error"
-      title="Submission Failed"
-      subTitle="Please check and modify the following information before resubmitting."
-      extra={<Button type="primary">Refresh</Button>}
+      title="逻辑错误"
+      subTitle="请刷新页面再次尝试"
+      extra={<Button type="primary">刷新</Button>}
     />
   );
 
