@@ -1,5 +1,3 @@
-import { AxiosResponse } from 'axios';
-
 export type ENV = 'production' | 'test' | 'development';
 
 export interface HostNameEnvMap {
@@ -13,17 +11,8 @@ export interface EnvMap {
   };
 }
 
-export interface AxiosCommon {
-  [key: string]: string | number | boolean;
-}
-
-export interface AxiosResponseConfig<T> extends AxiosResponse {
-  code?: number;
-  msg?: string;
-  result?: T;
-}
-
-export interface AxiosSourceCancelConfig {
-  token: undefined;
-  cancel: null;
+export interface AxiosResponseData<T> {
+  code: number;
+  msg: string;
+  result: T;
 }

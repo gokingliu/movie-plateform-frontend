@@ -5,23 +5,49 @@
   width: 100%;
   height: 100%;
 
+  .ant-select:not(.ant-select-customize-input) {
+    .ant-select-selector {
+      height: 44px;
+      border-radius: 30px;
+
+      .ant-select-selection-search {
+        right: 18px;
+        left: 18px;
+
+        .ant-select-selection-search-input {
+          height: 42px;
+        }
+      }
+
+      .ant-select-selection-placeholder {
+        line-height: 42px;
+        text-align: center;
+      }
+    }
+  }
+
   &__tooltip {
-    .ant-popover-arrow {
-      display: none;
-    }
+    .ant-popover-content {
+      top: -6px;
 
-    .ant-popover-inner-content {
-      padding: 0;
-
-      .buttons {
-        display: flex;
-        flex-direction: column;
+      .ant-popover-arrow {
+        display: none;
       }
 
-      .button {
-        width: 80px;
+      .ant-popover-inner-content {
+        padding: 0;
+
+        .buttons {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .button {
+          width: 80px;
+        }
       }
     }
+
   }
 
   &__avatar {

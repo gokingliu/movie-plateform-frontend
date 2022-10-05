@@ -1,6 +1,6 @@
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 import api from 'src/api';
-import { StoreUserState } from 'src/types';
+import { StoreLoginAction, StoreUserState } from 'src/types';
 
 const userSlice = createSlice({
   // 命名空间
@@ -8,45 +8,100 @@ const userSlice = createSlice({
   // state 数据初始值
   initialState: {
     username: '',
-    token: localStorage.getItem('token') || '',
+    role: 0,
+    token: '',
   },
   // actions，在组件中可以直接通过 dispatch 进行触发
   reducers: {
     // 设置用户信息
-    setUserState(state, action: PayloadAction<StoreUserState>) {
+    actionUserState(state, action: PayloadAction<StoreUserState>) {
+      localStorage.clear();
       const { username, token } = action.payload;
-      state.username = username;
-      state.token = token;
+      [state.username, state.token] = [username, token];
+      if (token) {
+        localStorage.setItem('username', username);
+        localStorage.setItem('token', token);
+      }
     },
   },
 });
 
-// 用户登录 (异步请求)
-export const loginAction =
-  (payload: { username: string; password: string }) =>
-  async (dispatch: Dispatch): Promise<boolean> => {
-    let flag = false;
-    const { code, result } = await api.Login(payload);
-    if (code === 0) {
-      const token = window.atob(result?.token as string);
-      if (['userName', 'loginTime', 'uuid', ';', '='].every((item) => token.includes(item))) {
-        const tokenItem = token.split(';');
-        if (tokenItem.every((item) => item.split('=').length === 2)) {
-          flag = true;
-          const username = tokenItem.find((item) => item.includes('userName'))?.split('=')[1] as string;
-          localStorage.clear();
-          dispatch(
-            setUserState({
-              username,
-              token: result?.token as string,
-            }),
-          );
+// 解密 token
+const decodeToken = (token: string): Map<string, string> | void => {
+  const mapToken = new Map();
+  try {
+    const deToken = window.atob(token);
+    if (['userName', 'role', 'loginTime', 'uuid', ';', '='].every((item) => deToken.includes(item))) {
+      const deTokenMapArr = deToken.split(';');
+      if (deTokenMapArr.every((item) => item.split('=').length === 2)) {
+        deTokenMapArr.forEach((item) => {
+          const map = item.split('=');
+          mapToken.set(map[0], map[1]);
+        });
+        return mapToken;
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+// 设置用户信息 state
+const commitActionUserState = (dispatch: Dispatch, token: string): boolean | void => {
+  try {
+    const mapToken = decodeToken(token);
+    if (mapToken) {
+      const username = mapToken.get('username');
+      const roleStr = mapToken.get('role');
+      const loginTime = mapToken.get('loginTime');
+      if (username && roleStr && loginTime) {
+        if (Date.now() - parseInt(loginTime, 10) < 7 * 24 * 60 * 60) {
+          const role = parseInt(roleStr, 10);
+          dispatch(actionUserState({ username, role, token }));
+          return true;
         }
       }
     }
-    return flag;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+// 检查 token 可用性
+const actionValidToken =
+  () =>
+  (dispatch: Dispatch): boolean | void => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) return commitActionUserState(dispatch, token);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-export const { setUserState } = userSlice.actions;
+// 用户登录 (异步请求)
+const actionLogin =
+  (payload: StoreLoginAction) =>
+  async (dispatch: Dispatch): Promise<boolean | void> => {
+    try {
+      const {
+        data: { code, result },
+      } = await api.Login(payload);
+      if (code === 0 && result?.token) return commitActionUserState(dispatch, result.token);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+// 用户退出
+const actionLogout =
+  () =>
+  (dispatch: Dispatch): void => {
+    dispatch(actionUserState({ username: '', role: 0, token: '' }));
+  };
+
+export { actionValidToken, actionLogin, actionLogout };
+
+export const { actionUserState } = userSlice.actions;
 
 export default userSlice.reducer;

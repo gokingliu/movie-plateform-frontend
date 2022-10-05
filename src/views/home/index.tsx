@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, Result, Spin } from 'antd';
-import { setUserState } from 'src/store/modules/user.store';
+import { actionUserState } from 'src/store/modules/user.store';
 
 const Home: FC = () => {
   /** DisplayName */
@@ -9,7 +9,7 @@ const Home: FC = () => {
 
   const dispatch = useDispatch();
 
-  const setName = () => dispatch(setUserState({ username: 'crotaliu', token: '1111' }));
+  const setName = () => dispatch(actionUserState({ username: 'crotaliu', role: 1, token: '1111' }));
 
   return (
     <>
