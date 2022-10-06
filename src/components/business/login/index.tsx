@@ -1,8 +1,11 @@
 import React, { useEffect, useState, FC } from 'react';
-import { Button, Checkbox, Form, Input, Modal } from 'antd';
+import { Button, Checkbox, Form, Input, message, Modal } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useStoreDispatch, useStoreSelector, StoreState } from 'src/store';
 import { actionModal } from 'src/store/modules/modal.store';
+import { FormLoginValues } from 'src/types';
+import api from 'src/api';
+import ConfigForm from 'src/components/common/config-form';
 import './index.less';
 
 const Login: FC = () => {
@@ -15,89 +18,92 @@ const Login: FC = () => {
   // 调用 store 方法
   const dispatch = useStoreDispatch();
   // modal 打开/关闭
-  const [open, setOpen] = useState(false);
-  // model 内容
-  const [modalText, setModalText] = useState('Content of the modal');
-  // modal loading
-  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+  // 登录按钮 loading
+  const [loginLoading, setLoginLoading] = useState(false);
+  // 表单 Ref
+  const [form] = Form.useForm();
 
   /** Effect */
   useEffect(() => {
-    setOpen(modal);
-
+    setVisible(modal);
     return () => {
-      setOpen(false);
+      setVisible(false);
     };
   }, [modal]);
 
   /** Method */
-  const handleOk = () => {
-    setModalText('The modal will be closed after two seconds');
-    setConfirmLoading(true);
-    setTimeout(() => {
-      dispatch(actionModal({ modal: false }));
-      setConfirmLoading(false);
-    }, 2000);
-  };
+  // 关闭 modal
   const handleCancel = () => {
-    console.log('Clicked cancel button');
     dispatch(actionModal({ modal: false }));
   };
-
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
+  // 表单完成
+  const onFinish = () => {
+    setLoginLoading(true);
+    try {
+      form
+        .validateFields()
+        .then(async (values: FormLoginValues) => {
+          const {
+            data: { code, result },
+          } = await api.Login({ username: values.username, password: values.password });
+          console.log(code, result);
+          setLoginLoading(false);
+          dispatch(actionModal({ modal: false }));
+        })
+        .catch(() => {
+          setLoginLoading(false);
+          message.error('登录失败，请重试！');
+        });
+    } catch (e) {
+      console.error(e);
+    }
   };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+  // 表单失败
+  const onFinishFailed = () => {
+    message.error('请正确填写用户名和密码！');
   };
 
   /** ReactDOM */
   return (
-    <Modal
-      title="登录"
-      getContainer={false}
-      open={open}
-      onOk={handleOk}
-      confirmLoading={confirmLoading}
-      onCancel={handleCancel}
-    >
-      <Form
-        name="login-form"
-        className="login-form"
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-        <Form.Item name="username" rules={[{ required: true, message: '请输入用户名' }]}>
-          <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
-        </Form.Item>
-
-        <Form.Item name="password" rules={[{ required: true, message: '请输入密码' }]}>
-          <Input.Password
-            prefix={<LockOutlined className="site-form-item-icon" />}
-            type="password"
-            placeholder="Password"
-          />
-        </Form.Item>
-
-        <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>记住账号密码</Checkbox>
-          </Form.Item>
-
-          <a className="login-form-forgot" href="">
-            忘记密码
-          </a>
-        </Form.Item>
-
-        <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-form-button">
-            登 录
-          </Button>
-          或 <a href="">注册</a>
-        </Form.Item>
-      </Form>
+    <Modal title="登录" getContainer={false} maskClosable={false} open={visible} onCancel={handleCancel} footer={null}>
+      <ConfigForm
+        formConfig={{
+          form,
+          name: 'login-form',
+          className: 'login-form',
+          initialValues: { remember: true },
+          onFinish,
+          onFinishFailed,
+        }}
+        formItemConfigs={[
+          {
+            name: 'username',
+            rules: [{ required: true, message: '请输入用户名' }],
+            children: <Input prefix={<UserOutlined />} placeholder="用户名" />,
+          },
+          {
+            name: 'password',
+            rules: [{ required: true, message: '请输入密码' }],
+            children: <Input.Password prefix={<LockOutlined />} type="password" placeholder="密码" />,
+          },
+          {
+            name: 'remember',
+            valuePropName: 'checked',
+            children: <Checkbox>自动登录</Checkbox>,
+          },
+          {
+            children: (
+              <>
+                <Button className="login-form-button" type="primary" htmlType="submit" loading={loginLoading}>
+                  登 录
+                </Button>
+                或 <a href="">注册</a>
+              </>
+            ),
+          },
+        ]}
+      />
     </Modal>
   );
 };
