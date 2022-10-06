@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
+import { Avatar, Button, Popover } from 'antd';
 import { useStoreDispatch, useStoreSelector, StoreState } from 'src/store';
 import { useNavigate } from 'react-router-dom';
-import { Avatar, Button, Popover } from 'antd';
 import { actionLogout } from 'src/store/modules/user.store';
 
 const UserName: FC = () => {

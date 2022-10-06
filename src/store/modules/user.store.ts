@@ -2,7 +2,7 @@ import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 import api from 'src/api';
 import { StoreLoginAction, StoreUserState } from 'src/types';
 
-const userSlice = createSlice({
+const UserSlice = createSlice({
   // 命名空间
   name: 'user',
   // state 数据初始值
@@ -102,6 +102,6 @@ const actionLogout =
 
 export { actionValidToken, actionLogin, actionLogout };
 
-export const { actionUserState } = userSlice.actions;
+export const { actionUserState } = UserSlice.actions;
 
-export default userSlice.reducer;
+export default UserSlice.reducer;

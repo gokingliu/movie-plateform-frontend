@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { YoutubeOutlined } from '@ant-design/icons';
 import Search from './modules/search';
 import UserName from './modules/username';
+import Login from 'src/components/business/login';
 import './index.less';
 
 const TopBar: FC = () => {
@@ -10,13 +11,17 @@ const TopBar: FC = () => {
 
   /** ReactDOM */
   return (
-    <div id="TopBar" className="top-bar">
-      <YoutubeOutlined style={{ color: '#fff', fontSize: 40 }} />
+    <>
+      <div id="TopBar" className="top-bar">
+        <YoutubeOutlined style={{ color: '#fff', fontSize: 40 }} />
 
-      <Search />
+        <Search />
 
-      <UserName />
-    </div>
+        <UserName />
+      </div>
+
+      <Login />
+    </>
   );
 };
 

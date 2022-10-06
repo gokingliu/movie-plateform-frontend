@@ -1,3 +1,7 @@
+export interface StoreModalState {
+  modal: boolean;
+}
+
 export interface StoreUserState {
   username: string;
   role: number;

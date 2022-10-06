@@ -36,7 +36,7 @@ const Search: FC = () => {
   return (
     <AutoComplete style={{ width: '25%' }} allowClear autoFocus onSearch={handleSearch} placeholder="搜一搜电影">
       {result.map((movie) => (
-        <Option key={movie.mid} value={movie.mid}>
+        <Option key={movie.mid} value={movie.mName}>
           {movie.mName}
         </Option>
       ))}
