@@ -8,12 +8,9 @@ const Search: FC = () => {
   Search.displayName = 'Search';
 
   /** Data */
-  // 搜索结果
-  const [result, setResult] = useState<ResponseList[]>([]);
-  // 搜索接口取消方法
-  const canceler = useRef<AxiosCanceler>(null);
-  // AutoComplete option 选项
-  const { Option } = AutoComplete;
+  const [result, setResult] = useState<ResponseList[]>([]); // 搜索结果
+  const canceler = useRef<AxiosCanceler>(null); // 搜索接口取消方法
+  const { Option } = AutoComplete; // AutoComplete option 选项
 
   /** Method */
   // 搜索逻辑

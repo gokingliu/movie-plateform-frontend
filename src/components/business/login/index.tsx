@@ -14,16 +14,11 @@ const Login: FC = () => {
   Login.displayName = 'Login';
 
   /** Data */
-  // 从 store 中获取 userName token
-  const { modal } = useStoreSelector((state: StoreState) => state.modal);
-  // 调用 store 方法
-  const dispatch = useStoreDispatch();
-  // modal 打开/关闭
-  const [visible, setVisible] = useState(false);
-  // 登录按钮 loading
-  const [loginLoading, setLoginLoading] = useState(false);
-  // 表单 Ref
-  const [form] = Form.useForm();
+  const { modal } = useStoreSelector((state: StoreState) => state.modal); // 从 store 中获取 userName token
+  const dispatch = useStoreDispatch(); // 调用 store 方法
+  const [visible, setVisible] = useState(false); // modal 打开/关闭
+  const [loginLoading, setLoginLoading] = useState(false); // 登录按钮 loading
+  const [form] = Form.useForm(); // 表单 Ref
 
   /** Effect */
   useEffect(() => {
@@ -57,7 +52,7 @@ const Login: FC = () => {
     const {
       data: { msg, result },
     } = await api.CheckUserName({ userName: value });
-    // todo 后端修复校验正确时 result 的值
+    // TODO 后端修复校验正确时 result 的值
     if (result) return Promise.resolve();
     return Promise.reject(new Error(msg));
   };

@@ -10,7 +10,6 @@ const UserName: FC = () => {
   UserName.displayName = 'UserName';
 
   /** Data */
-  // 颜色值数组
   const colorList = [
     '#f56a00',
     '#7265e6',
@@ -22,13 +21,10 @@ const UserName: FC = () => {
     '#44375f',
     '#d70e1e',
     '#925bc7',
-  ];
-  // 从 store 中获取 userName token
-  const { userName, token } = useStoreSelector((state: StoreState) => state.user);
-  // 调用 store 方法
-  const dispatch = useStoreDispatch();
-  // 路由跳转
-  const navigate = useNavigate();
+  ]; // 颜色值数组
+  const { userName, token } = useStoreSelector((state: StoreState) => state.user); // 从 store 中获取 userName token
+  const dispatch = useStoreDispatch(); // 调用 store 方法
+  const navigate = useNavigate(); // 路由跳转
 
   /** Method */
   // 获取显示用户名
