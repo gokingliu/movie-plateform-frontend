@@ -3,6 +3,7 @@ import { Button, Checkbox, Form, Input, message, Modal } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useStoreDispatch, useStoreSelector, StoreState } from 'src/store';
 import { actionModal } from 'src/store/modules/modal.store';
+import { actionLogin } from 'src/store/modules/user.store';
 import { FormLoginValues } from 'src/types';
 import api from 'src/api';
 import ConfigForm from 'src/components/common/config-form';
@@ -13,7 +14,7 @@ const Login: FC = () => {
   Login.displayName = 'Login';
 
   /** Data */
-  // 从 store 中获取 username token
+  // 从 store 中获取 userName token
   const { modal } = useStoreSelector((state: StoreState) => state.modal);
   // 调用 store 方法
   const dispatch = useStoreDispatch();
@@ -27,16 +28,10 @@ const Login: FC = () => {
   /** Effect */
   useEffect(() => {
     setVisible(modal);
-    return () => {
-      setVisible(false);
-    };
+    return () => setVisible(false);
   }, [modal]);
 
   /** Method */
-  // 关闭 modal
-  const handleCancel = () => {
-    dispatch(actionModal({ modal: false }));
-  };
   // 表单完成
   const onFinish = () => {
     setLoginLoading(true);
@@ -44,29 +39,39 @@ const Login: FC = () => {
       form
         .validateFields()
         .then(async (values: FormLoginValues) => {
-          const {
-            data: { code, result },
-          } = await api.Login({ username: values.username, password: values.password });
-          console.log(code, result);
+          const res = await dispatch(actionLogin({ userName: values.userName, password: values.password }));
+          if (res) return Promise.reject(res);
           setLoginLoading(false);
           dispatch(actionModal({ modal: false }));
         })
-        .catch(() => {
+        .catch((error) => {
           setLoginLoading(false);
-          message.error('登录失败，请重试！');
+          message.error(error);
         });
     } catch (e) {
       console.error(e);
     }
   };
-  // 表单失败
-  const onFinishFailed = () => {
-    message.error('请正确填写用户名和密码！');
+  // 用户名变化时进行校验
+  const onChange = async (_: unknown, value: string) => {
+    const {
+      data: { msg, result },
+    } = await api.CheckUserName({ userName: value });
+    // todo 后端修复校验正确时 result 的值
+    if (result) return Promise.resolve();
+    return Promise.reject(new Error(msg));
   };
 
   /** ReactDOM */
   return (
-    <Modal title="登录" getContainer={false} maskClosable={false} open={visible} onCancel={handleCancel} footer={null}>
+    <Modal
+      title="登录"
+      getContainer={false}
+      maskClosable={false}
+      footer={null}
+      open={visible}
+      onCancel={() => dispatch(actionModal({ modal: false }))}
+    >
       <ConfigForm
         formConfig={{
           form,
@@ -74,12 +79,12 @@ const Login: FC = () => {
           className: 'login-form',
           initialValues: { remember: true },
           onFinish,
-          onFinishFailed,
+          onFinishFailed: () => message.error('请正确填写用户名和密码！'),
         }}
         formItemConfigs={[
           {
-            name: 'username',
-            rules: [{ required: true, message: '请输入用户名' }],
+            name: 'userName',
+            rules: [{ required: true, message: '请输入用户名' }, { validator: onChange }],
             children: <Input prefix={<UserOutlined />} placeholder="用户名" />,
           },
           {

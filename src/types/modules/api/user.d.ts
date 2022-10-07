@@ -1,17 +1,17 @@
 // CheckUserName 接口
 export interface RequestCheckUserName {
-  username: string;
+  userName: string;
 }
 
 // Register 接口
 export interface RequestRegister {
-  username: string;
+  userName: string;
   password: string;
 }
 
 // Login 接口
 export interface RequestLogin {
-  username: string;
+  userName: string;
   password: string;
 }
 

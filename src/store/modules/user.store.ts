@@ -7,7 +7,7 @@ const UserSlice = createSlice({
   name: 'user',
   // state 数据初始值
   initialState: {
-    username: '',
+    userName: '',
     role: 0,
     token: '',
   },
@@ -16,10 +16,10 @@ const UserSlice = createSlice({
     // 设置用户信息
     actionUserState(state, action: PayloadAction<StoreUserState>) {
       localStorage.clear();
-      const { username, token } = action.payload;
-      [state.username, state.token] = [username, token];
+      const { userName, token } = action.payload;
+      [state.userName, state.token] = [userName, token];
       if (token) {
-        localStorage.setItem('username', username);
+        localStorage.setItem('userName', userName);
         localStorage.setItem('token', token);
       }
     },
@@ -47,49 +47,53 @@ const decodeToken = (token: string): Map<string, string> | void => {
 };
 
 // 设置用户信息 state
-const commitActionUserState = (dispatch: Dispatch, token: string): boolean | void => {
+const commitActionUserState = (dispatch: Dispatch, token: string): string | void => {
   try {
     const mapToken = decodeToken(token);
     if (mapToken) {
-      const username = mapToken.get('username');
+      const userName = mapToken.get('userName');
       const roleStr = mapToken.get('role');
       const loginTime = mapToken.get('loginTime');
-      if (username && roleStr && loginTime) {
+      if (userName && roleStr && loginTime) {
         if (Date.now() - parseInt(loginTime, 10) < 7 * 24 * 60 * 60) {
           const role = parseInt(roleStr, 10);
-          dispatch(actionUserState({ username, role, token }));
-          return true;
+          dispatch(actionUserState({ userName, role, token }));
         }
       }
     }
+    return 'Token 解析失败';
   } catch (e) {
     console.error(e);
+    return 'Token 解析失败';
   }
 };
 
 // 检查 token 可用性
 const actionValidToken =
   () =>
-  (dispatch: Dispatch): boolean | void => {
+  (dispatch: Dispatch): string | void => {
     try {
       const token = localStorage.getItem('token');
       if (token) return commitActionUserState(dispatch, token);
     } catch (e) {
       console.error(e);
+      return 'Token 解析失败';
     }
   };
 
 // 用户登录 (异步请求)
 const actionLogin =
   (payload: StoreLoginAction) =>
-  async (dispatch: Dispatch): Promise<boolean | void> => {
+  async (dispatch: Dispatch): Promise<string | void> => {
     try {
       const {
-        data: { code, result },
+        data: { code, result, msg },
       } = await api.Login(payload);
       if (code === 0 && result?.token) return commitActionUserState(dispatch, result.token);
+      return msg;
     } catch (e) {
       console.error(e);
+      return '登录失败';
     }
   };
 
@@ -97,7 +101,7 @@ const actionLogin =
 const actionLogout =
   () =>
   (dispatch: Dispatch): void => {
-    dispatch(actionUserState({ username: '', role: 0, token: '' }));
+    dispatch(actionUserState({ userName: '', role: 0, token: '' }));
   };
 
 export { actionValidToken, actionLogin, actionLogout };

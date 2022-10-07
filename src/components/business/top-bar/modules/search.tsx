@@ -23,7 +23,7 @@ const Search: FC = () => {
       setResult([]);
       const {
         data: { code, result },
-      } = await api.GetList({ username: value }, canceler.current);
+      } = await api.GetList({ userName: value }, canceler.current);
       if (code === 0) {
         setResult(result);
       }

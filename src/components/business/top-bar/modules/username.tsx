@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { Avatar, Button, Popover } from 'antd';
-import { useStoreDispatch, useStoreSelector, StoreState } from 'src/store';
 import { useNavigate } from 'react-router-dom';
+import { useStoreDispatch, useStoreSelector, StoreState } from 'src/store';
 import { actionLogout } from 'src/store/modules/user.store';
+import { actionModal } from 'src/store/modules/modal.store';
 
 const UserName: FC = () => {
   /** DisplayName */
@@ -22,8 +23,8 @@ const UserName: FC = () => {
     '#d70e1e',
     '#925bc7',
   ];
-  // 从 store 中获取 username token
-  const { username, token } = useStoreSelector((state: StoreState) => state.user);
+  // 从 store 中获取 userName token
+  const { userName, token } = useStoreSelector((state: StoreState) => state.user);
   // 调用 store 方法
   const dispatch = useStoreDispatch();
   // 路由跳转
@@ -31,20 +32,18 @@ const UserName: FC = () => {
 
   /** Method */
   // 获取显示用户名
-  const handleUserName = () => (token ? username.substring(0, 1) : '登陆');
+  const handleUserName = () => (token ? userName.substring(0, 1) : '登陆');
   // 获取头像背景颜色
-  const avatarColor = (username: string): string => {
+  const avatarColor = (userName: string): string => {
     try {
-      const index = parseInt(username.charCodeAt(0).toString().split('').reverse().join().substring(0, 1), 10);
+      const index = parseInt(userName.charCodeAt(0).toString().split('').reverse().join().substring(0, 1), 10);
       return colorList[index || 0];
     } catch (e) {
-      return colorList[1];
+      return colorList[0];
     }
   };
   // 登陆弹框
-  const handleLogin = () => {
-    // ...
-  };
+  const handleLogin = () => dispatch(actionModal({ modal: true }));
 
   /** ReactDOM */
   return (
@@ -78,7 +77,7 @@ const UserName: FC = () => {
     >
       <Avatar
         className="top-bar__avatar"
-        style={{ backgroundColor: avatarColor(username) }}
+        style={{ backgroundColor: avatarColor(userName) }}
         gap={6}
         size="large"
         onClick={handleLogin}

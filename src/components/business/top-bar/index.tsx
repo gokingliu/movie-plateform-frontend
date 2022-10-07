@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { YoutubeOutlined } from '@ant-design/icons';
+import { GithubOutlined } from '@ant-design/icons';
 import Search from './modules/search';
 import UserName from './modules/username';
 import Login from 'src/components/business/login';
@@ -13,7 +13,7 @@ const TopBar: FC = () => {
   return (
     <>
       <div id="TopBar" className="top-bar">
-        <YoutubeOutlined style={{ color: '#fff', fontSize: 40 }} />
+        <GithubOutlined style={{ color: '#fff', fontSize: 36 }} />
 
         <Search />
 

@@ -3,12 +3,12 @@ export interface StoreModalState {
 }
 
 export interface StoreUserState {
-  username: string;
+  userName: string;
   role: number;
   token: string;
 }
 
 export interface StoreLoginAction {
-  username: string;
+  userName: string;
   password: string;
 }

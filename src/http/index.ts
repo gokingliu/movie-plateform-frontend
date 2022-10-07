@@ -26,20 +26,18 @@ class HTTP {
   responseSuccessHandle = (response: AxiosResponse<AxiosResponseData<never>>) => {
     let msg = '未知错误';
     if (!response || !response.data) msg = '接口错误';
-    if (response.data.code === 0) return response;
-    if (response.data.msg) msg = response.data.msg;
+    if (Number.isInteger(response.data.code) || response.data.msg || response.data.result) return response;
 
-    console.error(msg);
-    return Promise.reject(response.data);
+    console.error('responseSuccessHandle: ', msg);
+    return Promise.reject(response);
   };
 
   // 回包失败拦截器
   responseErrorHandle = (e: AxiosError) => {
     let msg = '未知错误';
-    if (axios.isCancel(e)) return Promise.reject(e);
     if (!e.response || !e.response.data) msg = '网络错误';
 
-    console.error(msg);
+    console.error('responseErrorHandle: ', msg);
     return Promise.reject(e);
   };
 

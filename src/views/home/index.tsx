@@ -11,7 +11,7 @@ const Home: FC = () => {
   // 调用 store 方法
   const dispatch = useStoreDispatch();
 
-  const setName = () => dispatch(actionUserState({ username: 'crotaliu', role: 1, token: '1111' }));
+  const setName = () => dispatch(actionUserState({ userName: 'crotaliu', role: 1, token: '1111' }));
 
   const setModal = () => dispatch(actionModal({ modal: true }));
 

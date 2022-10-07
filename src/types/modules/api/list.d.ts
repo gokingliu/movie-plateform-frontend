@@ -1,6 +1,6 @@
 // GetList 接口
 export interface RequestList {
-  username: string;
+  userName: string;
 }
 
 export interface ResponseList {
