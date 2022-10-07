@@ -10,18 +10,16 @@ const UserSlice = createSlice({
     userName: '',
     role: 0,
     token: '',
+    remember: false,
   },
   // actions，在组件中可以直接通过 dispatch 进行触发
   reducers: {
     // 设置用户信息
     actionUserState(state, action: PayloadAction<StoreUserState>) {
       localStorage.clear();
-      const { userName, token } = action.payload;
-      [state.userName, state.token] = [userName, token];
-      if (token) {
-        localStorage.setItem('userName', userName);
-        localStorage.setItem('token', token);
-      }
+      const { userName, role, token, remember } = action.payload;
+      [state.userName, state.role, state.token, state.remember] = [userName, role, token, remember];
+      if (remember && token) localStorage.setItem('token', token);
     },
   },
 });
@@ -47,7 +45,7 @@ const decodeToken = (token: string): Map<string, string> | void => {
 };
 
 // 设置用户信息 state
-const commitActionUserState = (dispatch: Dispatch, token: string): string | void => {
+const commitActionUserState = (dispatch: Dispatch, token: string, remember: boolean): string | void => {
   try {
     const mapToken = decodeToken(token);
     if (mapToken) {
@@ -57,7 +55,7 @@ const commitActionUserState = (dispatch: Dispatch, token: string): string | void
       if (userName && roleStr && loginTime) {
         if (Date.now() - parseInt(loginTime, 10) < 7 * 24 * 60 * 60) {
           const role = parseInt(roleStr, 10);
-          dispatch(actionUserState({ userName, role, token }));
+          dispatch(actionUserState({ userName, role, token, remember }));
         }
       }
     }
@@ -74,7 +72,7 @@ const actionValidToken =
   (dispatch: Dispatch): string | void => {
     try {
       const token = localStorage.getItem('token');
-      if (token) return commitActionUserState(dispatch, token);
+      if (token) return commitActionUserState(dispatch, token, true);
     } catch (e) {
       console.error(e);
       return 'Token 解析失败';
@@ -89,7 +87,7 @@ const actionLogin =
       const {
         data: { code, result, msg },
       } = await api.Login(payload);
-      if (code === 0 && result?.token) return commitActionUserState(dispatch, result.token);
+      if (code === 0 && result?.token) return commitActionUserState(dispatch, result.token, payload.remember);
       return msg;
     } catch (e) {
       console.error(e);
@@ -101,7 +99,7 @@ const actionLogin =
 const actionLogout =
   () =>
   (dispatch: Dispatch): void => {
-    dispatch(actionUserState({ userName: '', role: 0, token: '' }));
+    dispatch(actionUserState({ userName: '', role: 0, token: '', remember: false }));
   };
 
 export { actionValidToken, actionLogin, actionLogout };

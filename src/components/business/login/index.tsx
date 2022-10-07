@@ -1,6 +1,7 @@
 import React, { useEffect, useState, FC } from 'react';
 import { Button, Checkbox, Form, Input, message, Modal } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import { useStoreDispatch, useStoreSelector, StoreState } from 'src/store';
 import { actionModal } from 'src/store/modules/modal.store';
 import { actionLogin } from 'src/store/modules/user.store';
@@ -19,6 +20,7 @@ const Login: FC = () => {
   const [visible, setVisible] = useState(false); // modal 打开/关闭
   const [loginLoading, setLoginLoading] = useState(false); // 登录按钮 loading
   const [form] = Form.useForm(); // 表单 Ref
+  const navigate = useNavigate(); // 路由跳转
 
   /** Effect */
   useEffect(() => {
@@ -34,7 +36,7 @@ const Login: FC = () => {
       form
         .validateFields()
         .then(async (values: FormLoginValues) => {
-          const res = await dispatch(actionLogin({ userName: values.userName, password: values.password }));
+          const res = await dispatch(actionLogin(values));
           if (res) return Promise.reject(res);
           setLoginLoading(false);
           dispatch(actionModal({ modal: false }));
@@ -49,12 +51,15 @@ const Login: FC = () => {
   };
   // 用户名变化时进行校验
   const onChange = async (_: unknown, value: string) => {
-    const {
-      data: { msg, result },
-    } = await api.CheckUserName({ userName: value });
-    // TODO 后端修复校验正确时 result 的值
-    if (result) return Promise.resolve();
-    return Promise.reject(new Error(msg));
+    if (value) {
+      const {
+        data: { msg, result },
+      } = await api.CheckUserName({ userName: value });
+      // TODO 后端修复校验正确时 result 的值
+      if (result) return Promise.resolve();
+      return Promise.reject(new Error(msg));
+    }
+    return Promise.resolve();
   };
 
   /** ReactDOM */
@@ -95,10 +100,18 @@ const Login: FC = () => {
           {
             children: (
               <>
-                <Button className="login-form-button" type="primary" htmlType="submit" loading={loginLoading}>
+                <Button className="login-form__button" type="primary" htmlType="submit" loading={loginLoading}>
                   登 录
                 </Button>
-                或 <a href="">注册</a>
+                <p className="login-form__text">没有账号？试试注册吧～</p>
+                <Button
+                  className="login-form__button"
+                  onClick={() => {
+                    navigate('/register');
+                  }}
+                >
+                  注 册
+                </Button>
               </>
             ),
           },
