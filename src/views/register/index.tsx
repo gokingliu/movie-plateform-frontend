@@ -1,10 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
-import { Button, Form, Input, message } from 'antd';
+import { Button, Form, Input, message, FormInstance } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { useStoreDispatch } from 'src/store';
-import { actionLogin } from 'src/store/modules/user.store';
-import { actionModal } from 'src/store/modules/modal.store';
 import { checkPassword, checkUserName } from 'src/utils';
 import api from 'src/api';
 import { FormLoginValues } from 'src/types';
@@ -16,7 +13,6 @@ const Register: FunctionComponent = () => {
   Register.displayName = 'Register';
 
   /** Data */
-  const dispatch = useStoreDispatch(); // 调用 store 方法
   const [registerLoading, setRegisterLoading] = useState(false); // 注册按钮 loading
   const [form] = Form.useForm(); // 表单 Ref
   const navigate = useNavigate(); // 路由跳转
@@ -24,15 +20,17 @@ const Register: FunctionComponent = () => {
   /** Method */
   // 表单完成
   const onFinish = () => {
-    setRegisterLoading(true);
     try {
+      setRegisterLoading(true);
       form
         .validateFields()
         .then(async (values: FormLoginValues) => {
-          const res = await dispatch(actionLogin(values));
-          if (res) return Promise.reject(res);
+          const {
+            data: { result },
+          } = await api.Register({ userName: values.userName, password: values.password });
+          if (!result) return Promise.reject(result);
           setRegisterLoading(false);
-          dispatch(actionModal({ modal: false }));
+          navigate('/');
         })
         .catch((error) => {
           setRegisterLoading(false);
@@ -50,7 +48,7 @@ const Register: FunctionComponent = () => {
         data: { msg, result },
       } = await api.CheckUserName({ userName: value });
       // TODO 后端修复校验正确时 result 的值
-      if (result) return Promise.resolve();
+      if (!result) return Promise.resolve();
       return Promise.reject(new Error(msg));
     }
     return Promise.resolve();
@@ -64,6 +62,13 @@ const Register: FunctionComponent = () => {
     }
     return Promise.resolve();
   };
+  // 再次确认密码
+  const validPassword2 = ({ getFieldValue }: FormInstance) => ({
+    validator(_: unknown, value: string) {
+      if (!value || getFieldValue('password') === value) return Promise.resolve();
+      return Promise.reject(new Error('输入的两次密码不一致'));
+    },
+  });
 
   return (
     <div className="register">
@@ -86,6 +91,15 @@ const Register: FunctionComponent = () => {
               name: 'password',
               rules: [{ required: true, message: '请输入密码' }, { validator: validPassword }],
               children: <Input.Password prefix={<LockOutlined />} maxLength={32} type="password" placeholder="密码" />,
+            },
+            {
+              name: 'password2',
+              dependencies: ['password'],
+              hasFeedback: true,
+              rules: [{ required: true, message: '请再次输入密码' }, validPassword2],
+              children: (
+                <Input.Password prefix={<LockOutlined />} maxLength={32} type="password" placeholder="重复密码" />
+              ),
             },
             {
               children: (

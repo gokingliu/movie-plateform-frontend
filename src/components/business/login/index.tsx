@@ -6,7 +6,6 @@ import { useStoreDispatch, useStoreSelector, StoreState } from 'src/store';
 import { actionModal } from 'src/store/modules/modal.store';
 import { actionLogin } from 'src/store/modules/user.store';
 import { FormLoginValues } from 'src/types';
-import api from 'src/api';
 import ConfigForm from 'src/components/common/config-form';
 import './index.less';
 
@@ -31,8 +30,8 @@ const Login: FC = () => {
   /** Method */
   // 表单完成
   const onFinish = () => {
-    setLoginLoading(true);
     try {
+      setLoginLoading(true);
       form
         .validateFields()
         .then(async (values: FormLoginValues) => {
@@ -48,18 +47,6 @@ const Login: FC = () => {
     } catch (e) {
       console.error(e);
     }
-  };
-  // 用户名变化时进行校验
-  const onChange = async (_: unknown, value: string) => {
-    if (value) {
-      const {
-        data: { msg, result },
-      } = await api.CheckUserName({ userName: value });
-      // TODO 后端修复校验正确时 result 的值
-      if (result) return Promise.resolve();
-      return Promise.reject(new Error(msg));
-    }
-    return Promise.resolve();
   };
 
   /** ReactDOM */
@@ -84,7 +71,7 @@ const Login: FC = () => {
         formItemConfigs={[
           {
             name: 'userName',
-            rules: [{ required: true, message: '请输入用户名' }, { validator: onChange }],
+            rules: [{ required: true, message: '请输入用户名' }],
             children: <Input prefix={<UserOutlined />} placeholder="用户名" />,
           },
           {

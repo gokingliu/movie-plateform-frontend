@@ -86,7 +86,7 @@ const actionLogin =
     try {
       const {
         data: { code, result, msg },
-      } = await api.Login(payload);
+      } = await api.Login({ userName: payload.userName, password: payload.password });
       if (code === 0 && result?.token) return commitActionUserState(dispatch, result.token, payload.remember);
       return msg;
     } catch (e) {
