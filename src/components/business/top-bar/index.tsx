@@ -13,7 +13,7 @@ const TopBar: FC = () => {
   return (
     <>
       <div id="TopBar" className="top-bar">
-        <GithubOutlined style={{ color: '#fff', fontSize: 36 }} />
+        <GithubOutlined style={{ color: '#fff', fontSize: 32 }} />
 
         <Search />
 

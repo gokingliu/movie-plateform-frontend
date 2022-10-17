@@ -71,13 +71,7 @@ const UserName: FC = () => {
         )
       }
     >
-      <Avatar
-        className="top-bar__avatar"
-        style={{ backgroundColor: avatarColor(userName) }}
-        gap={6}
-        size="large"
-        onClick={handleLogin}
-      >
+      <Avatar className="top-bar__avatar" style={{ backgroundColor: avatarColor(userName) }} gap={6} size={36}>
         {handleUserName()}
       </Avatar>
     </Popover>

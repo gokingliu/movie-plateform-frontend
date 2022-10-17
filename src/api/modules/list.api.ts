@@ -9,9 +9,9 @@ const List = {
   GetList(
     data: RequestList,
     canceler: Canceler | null = null,
-  ): Promise<AxiosResponse<AxiosResponseData<ResponseList[]>>> {
+  ): Promise<AxiosResponse<AxiosResponseData<ResponseList>>> {
     return http.post(
-      '/GetList',
+      '/trpc.MovieService.operation.List/GetList',
       data,
       // eslint-disable-next-line no-param-reassign
       canceler ? { cancelToken: new axios.CancelToken((c) => (canceler = c)) } : {},

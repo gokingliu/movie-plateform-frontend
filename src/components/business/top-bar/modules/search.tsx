@@ -1,14 +1,14 @@
 import React, { useRef, useState, FC } from 'react';
 import { AutoComplete } from 'antd';
 import api, { AxiosCanceler } from 'src/api';
-import { ResponseList } from 'src/types';
+import { ResponseListItem } from 'src/types';
 
 const Search: FC = () => {
   /** DisplayName */
   Search.displayName = 'Search';
 
   /** Data */
-  const [result, setResult] = useState<ResponseList[]>([]); // 搜索结果
+  const [result, setResult] = useState<ResponseListItem[]>([]); // 搜索结果
   const canceler = useRef<AxiosCanceler>(null); // 搜索接口取消方法
   const { Option } = AutoComplete; // AutoComplete option 选项
 
@@ -20,12 +20,12 @@ const Search: FC = () => {
       setResult([]);
       const {
         data: { code, result },
-      } = await api.GetList({ userName: value }, canceler.current);
+      } = await api.GetList({ mName: value, pageNo: 1, pageSize: 10 }, canceler.current);
       if (code === 0) {
-        setResult(result);
+        setResult(result.list);
       }
     } catch (e) {
-      setResult([{ mid: 1, mName: 'test1', mTypeName: 'test2' }]);
+      setResult([]);
     }
   };
 
