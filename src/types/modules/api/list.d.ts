@@ -31,5 +31,5 @@ export interface ResponseListItem {
 
 export interface ResponseList {
   list: ResponseListItem[];
-  total: number;
+  count: number;
 }

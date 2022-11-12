@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef, FC } from 'react';
-import { Layout, Space, List } from 'antd';
+import React, { useEffect, useState, FC } from 'react';
+import { Divider, Layout, Space, List } from 'antd';
 import { EyeOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 import api from 'src/api';
 import { ResponseListItem } from 'src/types';
@@ -12,20 +12,22 @@ const Home: FC = () => {
   /** Data */
   const { Content, Sider } = Layout;
   const [list, setList] = useState<ResponseListItem[]>([]); // 电影列表
-  const pageNo = useRef(1); // 页码
-  const pageSize = 20; // 页面容量
+  const [total, setTotal] = useState<number>(0); // 电影总数
+  const [page, setPage] = useState<number>(1); // 页码
+  const pageSize = 10; // 页面容量
 
   /** Life Cycle Hook */
   useEffect(() => {
     getList();
-  }, []);
+  }, [page]);
 
   /** Method */
   const getList = async () => {
     const {
       data: { result },
-    } = await api.GetList({ pageNo: pageNo.current, pageSize });
+    } = await api.GetList({ pageNo: page, pageSize });
     setList(result.list);
+    setTotal(result.count);
   };
 
   /** ReactDOM */
@@ -35,18 +37,15 @@ const Home: FC = () => {
         <List
           itemLayout="vertical"
           size="large"
-          pagination={{
-            onChange: (page) => (pageNo.current = page),
-            pageSize,
-          }}
+          pagination={{ total, onChange: (page) => setPage(page), pageSize }}
           dataSource={list}
           renderItem={(item) => (
             <List.Item
               key={item.mid}
               actions={[
-                { icon: EyeOutlined, num: 2 },
-                { icon: LikeOutlined, num: 2 },
-                { icon: StarOutlined, num: 2 },
+                { icon: EyeOutlined, num: item.mViews },
+                { icon: LikeOutlined, num: item.mLikes },
+                { icon: StarOutlined, num: item.mCollects },
               ].map((action, index) => (
                 <Space key={index}>
                   {React.createElement(action.icon)}
@@ -80,7 +79,14 @@ const Home: FC = () => {
         />
       </Content>
 
-      <Sider width={400}>asdajsdhakjhsdjkahdkahdhajhkjhk</Sider>
+      <Sider width={400}>
+        <Divider orientation="left">热播榜</Divider>
+        <List bordered dataSource={list} renderItem={(item) => <List.Item>{item.mName}</List.Item>} />
+        <Divider orientation="left">点赞榜</Divider>
+        <List bordered dataSource={list} renderItem={(item) => <List.Item>{item.mName}</List.Item>} />
+        <Divider orientation="left">收藏榜</Divider>
+        <List bordered dataSource={list} renderItem={(item) => <List.Item>{item.mName}</List.Item>} />
+      </Sider>
     </Layout>
   );
 };
