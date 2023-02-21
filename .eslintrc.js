@@ -4,6 +4,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
     'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
     '@gokingliu/eslint-config',
     'plugin:@typescript-eslint/recommended',
     'prettier',

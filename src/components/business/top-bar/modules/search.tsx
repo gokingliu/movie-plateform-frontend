@@ -1,7 +1,7 @@
 import React, { useRef, useState, FC } from 'react';
 import { AutoComplete } from 'antd';
-import api, { AxiosCanceler } from 'src/api';
-import { ResponseListItem } from 'src/types';
+import api, { AxiosCanceler } from '@/api';
+import { ResponseListItem } from '@/types';
 
 const Search: FC = () => {
   /** DisplayName */

@@ -1,5 +1,5 @@
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
-import { StoreModalState } from 'src/types';
+import { StoreModalState } from '@/types';
 
 const ModalSlice = createSlice({
   // 命名空间

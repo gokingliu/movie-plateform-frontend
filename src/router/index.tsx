@@ -2,19 +2,19 @@ import React, { lazy, Suspense, FunctionComponent } from 'react';
 import { useRoutes, BrowserRouter, RouteObject } from 'react-router-dom';
 
 // 页面切换 Loading
-const Loading = lazy(() => import('src/components/common/loading'));
+const Loading = lazy(() => import('@/components/common/loading'));
 // 路由页面容器
-const RouteComponent = lazy(() => import('src/components/common/route-component'));
+const RouteComponent = lazy(() => import('@/components/common/route-component'));
 // 403 页面
-// const NotAuthorized = lazy(() => import('src/views/403'));
+// const NotAuthorized = lazy(() => import('@/views/403'));
 // 404 页面
-const NotFound = lazy(() => import('src/views/404'));
+const NotFound = lazy(() => import('@/views/404'));
 // 登陆页面
-const Register = lazy(() => import('src/views/register'));
+const Register = lazy(() => import('@/views/register'));
 // 客户端布局页面
-const Client = lazy(() => import('src/views/client'));
+const Client = lazy(() => import('@/views/client'));
 // 首页
-const Home = lazy(() => import('src/views/home'));
+const Home = lazy(() => import('@/views/home'));
 
 // 路由列表
 const routerList: RouteObject[] = [

@@ -1,4 +1,4 @@
-import { ENV, EnvMap, HostNameEnvMap } from 'src/types';
+import { ENV, EnvMap, HostNameEnvMap } from '@/types';
 
 /**
  * 域名对应环境
@@ -34,7 +34,7 @@ const envMap: EnvMap = {
   },
   // 开发环境
   development: {
-    defaultApi: 'https://gokingliu.dev.xyz',
+    defaultApi: 'http://120.48.44.102:8000',
     otherApi: '',
   },
 };

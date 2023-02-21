@@ -1,6 +1,6 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { baseEnv } from './config';
-import { AxiosResponseData } from 'src/types';
+import { AxiosResponseData } from '@/types';
 
 class HTTP {
   axios; // Axios 实例
@@ -17,7 +17,7 @@ class HTTP {
    * @description 拦截器
    */
   // 请求成功拦截器
-  requestSuccessHandle = (config: AxiosRequestConfig) => config;
+  requestSuccessHandle = (config: InternalAxiosRequestConfig) => config;
 
   // 请求失败拦截器
   requestErrorHandle = (e: AxiosError) => Promise.reject(e);

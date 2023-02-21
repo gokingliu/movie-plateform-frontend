@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, Canceler } from 'axios';
-import { AxiosResponseData, RequestList, ResponseList } from 'src/types';
-import http from 'src/http';
+import { AxiosResponseData, RequestList, ResponseList } from '@/types';
+import http from '@/http';
 
 const List = {
   /**

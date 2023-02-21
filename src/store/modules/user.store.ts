@@ -1,6 +1,6 @@
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
-import api from 'src/api';
-import { StoreLoginAction, StoreUserState } from 'src/types';
+import api from '@/api';
+import { StoreLoginAction, StoreUserState } from '@/types';
 
 const UserSlice = createSlice({
   // 命名空间

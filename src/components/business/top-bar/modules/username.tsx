@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { Avatar, Button, Popover } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useStoreDispatch, useStoreSelector, StoreState } from 'src/store';
-import { actionLogout } from 'src/store/modules/user.store';
-import { actionModal } from 'src/store/modules/modal.store';
+import { useStoreDispatch, useStoreSelector, StoreState } from '@/store';
+import { actionLogout } from '@/store/modules/user.store';
+import { actionModal } from '@/store/modules/modal.store';
 
 const UserName: FC = () => {
   /** DisplayName */

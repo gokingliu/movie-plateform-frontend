@@ -1,1 +1,11 @@
-craco.config.js
+/node_modules
+/dist
+/build
+/docs
+/mock
+/public
+/test
+/.vscode
+/yarn.lock
+/package-lock.json
+.DS_Store

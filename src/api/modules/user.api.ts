@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
-import { AxiosResponseData, RequestCheckUserName, RequestLogin, ResponseLogin, RequestRegister } from 'src/types';
-import http from 'src/http';
+import { AxiosResponseData, RequestCheckUserName, RequestLogin, ResponseLogin, RequestRegister } from '@/types';
+import http from '@/http';
 
 const User = {
   /**

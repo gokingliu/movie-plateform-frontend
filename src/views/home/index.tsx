@@ -1,8 +1,8 @@
 import React, { useEffect, useState, FC } from 'react';
 import { Divider, Layout, Space, List } from 'antd';
 import { EyeOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
-import api from 'src/api';
-import { ResponseListItem } from 'src/types';
+import api from '@/api';
+import { ResponseListItem } from '@/types';
 import './index.less';
 
 const Home: FC = () => {

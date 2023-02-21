@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Layout } from 'antd';
-import TopBar from 'src/components/business/top-bar';
+import TopBar from '@/components/business/top-bar';
 
 const { Content, Header, Sider } = Layout;
 

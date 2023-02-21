@@ -2,10 +2,10 @@ import React, { FunctionComponent, useState } from 'react';
 import { Button, Form, Input, message, FormInstance } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { checkPassword, checkUserName } from 'src/utils';
-import api from 'src/api';
-import { FormLoginValues } from 'src/types';
-import ConfigForm from 'src/components/common/config-form';
+import { checkPassword, checkUserName } from '@/utils';
+import api from '@/api';
+import { FormLoginValues } from '@/types';
+import ConfigForm from '@/components/common/config-form';
 import './index.less';
 
 const Register: FunctionComponent = () => {

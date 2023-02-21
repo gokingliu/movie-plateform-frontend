@@ -2,11 +2,11 @@ import React, { useEffect, useState, FC } from 'react';
 import { Button, Checkbox, Form, Input, message, Modal } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { useStoreDispatch, useStoreSelector, StoreState } from 'src/store';
-import { actionModal } from 'src/store/modules/modal.store';
-import { actionLogin } from 'src/store/modules/user.store';
-import { FormLoginValues } from 'src/types';
-import ConfigForm from 'src/components/common/config-form';
+import { useStoreDispatch, useStoreSelector, StoreState } from '@/store';
+import { actionModal } from '@/store/modules/modal.store';
+import { actionLogin } from '@/store/modules/user.store';
+import { FormLoginValues } from '@/types';
+import ConfigForm from '@/components/common/config-form';
 import './index.less';
 
 const Login: FC = () => {
