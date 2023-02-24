@@ -2,7 +2,33 @@
   height: calc(100vh - 64px);
   background-color: #fff;
 
+  .home-header {
+    display: flex;
+    height: fit-content;
+    background-color: #fff;
+    padding-top: 20px;
+
+    .home-search-form {
+      flex: 1 0 auto;
+
+      &__button {
+        width: 100px;
+        margin-right: 20px;
+      }
+
+      .ant-form-item {
+        margin-bottom: 12px;
+      }
+    }
+
+    .home-search-form-more {
+    }
+  }
+
   .home-content {
+    flex: 1;
+    padding: 0 100px 0 20px;
+
     .ant-list-vertical {
       .ant-spin-container {
         .ant-list-items {
@@ -28,10 +54,5 @@
         text-align: left;
       }
     }
-  }
-
-  .ant-layout-sider {
-    background-color: #fff;
-    padding: 0 10px;
   }
 }

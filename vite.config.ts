@@ -16,7 +16,11 @@ export default defineConfig({
     },
   },
   resolve: { alias: { '@': resolve(__dirname, 'src') } },
-  server: { headers: { 'Access-Control-Allow-Origin': '*' } },
+  server: {
+    proxy: {
+      '/trpc.MovieService.operation.List': 'http://120.48.44.102:8000',
+    },
+  },
   plugins: [
     react(),
     vitePluginChecker({ typescript: true }),

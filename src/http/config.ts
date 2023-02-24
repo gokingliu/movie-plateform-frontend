@@ -34,7 +34,7 @@ const envMap: EnvMap = {
   },
   // 开发环境
   development: {
-    defaultApi: 'http://120.48.44.102:8000',
+    defaultApi: 'http://localhost:5173',
     otherApi: '',
   },
 };
