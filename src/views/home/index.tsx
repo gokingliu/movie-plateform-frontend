@@ -1,5 +1,5 @@
 import React, { useEffect, useState, FC } from 'react';
-import { Button, Divider, Form, Layout, Radio, Space, List, message } from 'antd';
+import { Button, Divider, Descriptions, Form, Layout, Radio, Space, List, message } from 'antd';
 import { CaretUpOutlined, CaretDownOutlined, EyeOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 import api from '@/api';
 import { HomeFormValue, ResponseListItem } from '@/types';
@@ -211,26 +211,23 @@ const Home: FC = () => {
                 ))}
                 extra={<img width={172} alt="poster" src="https://joesch.moe/api/v1/random" />}
               >
-                <List.Item.Meta title={item.mName} />
-                <div>
-                  <Space size="large">
-                    <p>电影类型:{item.mTypeName}</p>
-                    <p>豆瓣评分:{item.mDouBanScore}</p>
-                    <p>年份:{item.mDateYear}</p>
-                  </Space>
-                </div>
-                <div>
-                  <Space size="large">
-                    <p>导演:{item.mDirector}</p>
-                    <p>国家:{item.mCountryName}</p>
-                    <p>语言:{item.mLanguageName}</p>
-                  </Space>
-                </div>
-                <div>
-                  <Space size="large">
-                    <p>演员:{item.mStarring}</p>
-                  </Space>
-                </div>
+                <List.Item.Meta title={<a href={item.mName}>{item.mName}</a>} />
+
+                <Descriptions>
+                  {[
+                    { name: '电影类型', value: item.mTypeName },
+                    { name: '豆瓣评分', value: item.mDouBanScore },
+                    { name: '年份', value: item.mDateYear },
+                    { name: '导演', value: item.mDirector },
+                    { name: '国家', value: item.mCountryName },
+                    { name: '语言', value: item.mLanguageName },
+                    { name: '演员', value: item.mStarring },
+                  ].map((spaceItem, index) => (
+                    <Descriptions.Item key={index} label={spaceItem.name}>
+                      {spaceItem.value}
+                    </Descriptions.Item>
+                  ))}
+                </Descriptions>
               </List.Item>
             )}
           />

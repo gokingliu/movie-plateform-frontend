@@ -15,6 +15,8 @@ const Register = lazy(() => import('@/views/register'));
 const Client = lazy(() => import('@/views/client'));
 // 首页
 const Home = lazy(() => import('@/views/home'));
+// 视频详情页
+const Info = lazy(() => import('@/views/info'));
 
 // 路由列表
 const routerList: RouteObject[] = [
@@ -22,6 +24,11 @@ const routerList: RouteObject[] = [
     path: '/',
     element: <Client />,
     children: [{ index: true, element: <Home /> }],
+  },
+  {
+    path: '/info',
+    element: <Client />,
+    children: [{ index: true, element: <Info /> }],
   },
   {
     path: '/register',

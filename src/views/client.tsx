@@ -3,17 +3,15 @@ import { Outlet } from 'react-router-dom';
 import { Layout } from 'antd';
 import TopBar from '@/components/business/top-bar';
 
-const { Content, Header } = Layout;
-
 const Client: FC = () => (
   <Layout>
-    <Header>
+    <Layout.Header>
       <TopBar />
-    </Header>
+    </Layout.Header>
 
-    <Content>
+    <Layout.Content>
       <Outlet />
-    </Content>
+    </Layout.Content>
   </Layout>
 );
 
